@@ -66,11 +66,14 @@ class Game extends React.Component {
         squares: Array(9).fill(null),
       }],
       xIsNext: true,
+      stepNumber: 0,
     }
   }
 
   handleClick(i) {
-    const history = this.state.history;
+    // Throw away future history if any (if we go back in time)
+    const history = this.state.history.slice(0, this.state.stepNumber + 1);
+    console.log("History Length: " + history.length);
     const current = history[history.length - 1];
 		// Set values in the arrays. Array is immutable (does not change directly)
     const squares = current.squares.slice();
@@ -87,17 +90,22 @@ class Game extends React.Component {
       history: history.concat([{
         squares: squares,
       }]),
-			xIsNext: !this.state.xIsNext
+      xIsNext: !this.state.xIsNext,
+      stepNumber: history.length,
 		});
   }
   
-  jumpTo(move) {
-
+  jumpTo(step) {
+    // Set xIsNext to true if the number that we’re changing stepNumber to is even:
+    this.setState({
+      stepNumber: step,
+      xIsNext: (step % 2) === 0,
+    });
   }
 
 	render() {
     const history = this.state.history;
-    const current = history[history.length - 1];
+    const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {
@@ -105,7 +113,9 @@ class Game extends React.Component {
         'Go to move #' + move :
         'Go to Game Start';
       return (
-        <li>
+        <li
+          key={move}
+        >
           <button
             onClick={() => this.jumpTo(move)}
           >
