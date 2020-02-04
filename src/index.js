@@ -97,8 +97,11 @@ class Game extends React.Component {
         console.log("New Game is clicked");
         const history = this.state.history.slice(0);
         const current = history[0];
-        const squares = current.squares.slice();
+        const squares = current.squares.slice(0);
         this.setState({
+            history: [{
+                squares
+            }],
             stepNumber: 0,
             xIsNext: true,
         })
