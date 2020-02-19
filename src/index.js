@@ -178,5 +178,11 @@ function calculateWinner(squares) {
 
 // ========================================
 
-ReactDOM.render(<Game />, document.getElementById("root"));
+ReactDOM.render(
+	// Used to combine two jsx elements
+	<>
+		<Home />
+		<Game />
+	</>
+	, document.getElementById("root"));
 // ReactDOM.render(<Home />, document.getElementById("root"));
